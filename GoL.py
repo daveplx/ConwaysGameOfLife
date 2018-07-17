@@ -208,11 +208,13 @@ if size == None:
 	matrix = createMatrix()
 else:
 	matrix = createMatrix(size)
+
 if inFile != None:
 	with open(inFile, 'r') as f:
 		for i, l in enumerate(f):
 			pass
 		inFileSize = i  + 1
+	matrix = createMatrix(inFileSize)
 	with open(inFile, 'r') as f:
 		count = 0
 		for line in f:
@@ -241,16 +243,20 @@ while(True):
 		break
 print('---------- seed ----------')
 printMatrix(initial_matrix)
+if not (keepSeed == None and inFile == None):
+	exit(0)
 print('You can save this seed if you want, answer yes')
 if yesNoCheck():
 	saveSeed = input('Please enter the path where you want to save the seed\n> ')
-	if path.isFile(saveSeed):
+	if path.isfile(saveSeed):
 		print('File already exists and will be overwritten: \'{}\''.format(saveSeed))
-		if yesNoCheck():
-			try:
-				with open(saveseed, 'w') as f:
-					for line in initial_matrix:
-						f.write(str(line) + '\n')
-			except Exception as e:
-				print('Error: {}'.format(e))
-				exit(1)
+		if not yesNoCheck():
+			exit(0)
+		try:
+			with open(saveSeed, 'w') as f:
+				for line in initial_matrix:
+					f.write(str(line) + '\n')
+			print('Seed saved as {}'.format(saveSeed))
+		except Exception as e:
+			print('Error: {}'.format(e))
+			exit(1)
